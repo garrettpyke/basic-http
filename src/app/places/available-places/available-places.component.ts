@@ -16,6 +16,7 @@ import { PlacesContainerComponent } from '../places-container/places-container.c
 export class AvailablePlacesComponent implements OnInit {
   places = signal<Place[] | undefined>(undefined);
   isFetching = signal(false);
+  error = signal('');
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
 
@@ -30,6 +31,10 @@ export class AvailablePlacesComponent implements OnInit {
       .pipe(map((resData) => resData.places))
       .subscribe({
         next: (places) => this.places.set(places),
+        error: (err) => {
+          console.log(err);
+          this.error.set(err.error.response);
+        },
         complete: () => this.isFetching.set(false),
       });
 
