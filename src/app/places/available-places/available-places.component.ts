@@ -30,9 +30,10 @@ export class AvailablePlacesComponent implements OnInit {
       .get<{ places: Place[] }>('http://localhost:3000/places')
       .pipe(
         map((resData) => resData.places),
-        catchError((err) =>
-          throwError(() => new Error('Failed to fetch places data.'))
-        )
+        catchError((err) => {
+          console.log(err);
+          return throwError(() => new Error('Failed to fetch places data.'));
+        })
       )
       .subscribe({
         next: (places) => this.places.set(places),
